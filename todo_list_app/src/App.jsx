@@ -1,47 +1,62 @@
-import { useRef, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  const inputValue = useRef();
-  const buttonAdd = useRef();
-  
-  
-  const taskAdd = () => {
-    const theValue = inputValue.current.value;
-    buttonAdd.current.innerText = theValue
+const App = () => {
+  const [list,setList]=useState([])
+  const [item,setItem]=useState("")
+const AddToList=()=>{
+  if(item !==""){
+    list.push(item)
+    setList([...list])
+    setItem('')
+  }else{
+    alert('Not empty')
   }
-  const deleteTask = () => {
-    buttonAdd.current.innerText = ''
-  }
-
-
-
-  return (
-    <div className='container-fluid bg-dark'>
-      <div className='row'>
-        <div className='col'>
-          <input ref={inputValue} className="p-2 m-5 w-100" placeholder='Write your tasks' />
-          <button onClick={taskAdd} className='btn-success m-3 rounded-5'>Task Add</button>
-
-      </div>
-      <div className='col'>
-          <div className='row p-5'>
-            <div>
-              <p ref={buttonAdd} className='text-white'></p>
-            </div>
-            <div>
-              <button onClick={deleteTask} className='btn-danger'>Delete</button>
-            </div>
-        </div>
-      </div>
-      </div>
-        
-    </div>
-  )
+   
 }
+const ItemRemove=(index)=>{
+  list.splice(index,1)
+  setList([...list])
+}  
+  return (
+    <div>
+        <div className="container  px-4 ">
+          <div className='bg-white w-96 rounded mx-auto my-10 drop-shadow-lg p-2'>
+              <h1 className='text-center py-5 font-semibold text-decoration-underline text-bg-primary rounded-4'>ToDo Application</h1>
+              <input onChange={(e)=>setItem(e.target.value)} value={item} className='bg-white appearance-none border-2 border-gray-200 rounded w-60 py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500' type="text" placeholder='Add Item' />
+              <button onClick={AddToList} className="p-2 bg-dark rounded-1 text-white m-1">Add</button>
+             
+          </div>
+        <div>
+           <table className='table-auto mx-auto'>
+            <thead>
+              <tr>
+                <th className='border px-4 py-2'>Item</th>
+                <th className='border px-4 py-2'>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                list.length!==0?(
+                  list.map((element,index)=>{
+                      return(
+                        <tr key={index}>
+                          <td className='border px-4 py-2'>{element}</td>
+                          <td onClick={()=>{
+                            ItemRemove(index)
+                          }}
+                           className='border px-4 py-2'><button className='px-8 py-2 ml-2 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2'>Remove</button></td>
+                        </tr>
+                      )
+                  })
+                ):(<tr></tr>)
+              }
+            </tbody>
+            </table>
+           </div>
+        </div>
+    </div>
+  );
+};
 
-export default App
+export default App;
